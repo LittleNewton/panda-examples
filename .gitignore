@@ -1,0 +1,5 @@
+
+# big image files.
+*.qcow
+
+# .vscode
