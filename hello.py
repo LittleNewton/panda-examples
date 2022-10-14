@@ -13,20 +13,24 @@ panda = Panda(arch='i386',
 # Counter of the number of basic blocks
 blocks = 0
 
-# Register a callback to run before_block_exec and increment blocks
-
 
 @ panda.cb_before_block_exec
 def before_block_execute(cpustate, transblock):
+    """
+    Register a callback to run before_block_exec and increment blocks
+    """
     global blocks
     blocks += 1
-
-# This 'blocking' function is queued to run in a seperate thread from the main CPU loop
-# which allows for it to wait for the guest to complete commands
+    # pc = panda.current_pc(cpustate)
+    # print("About to run the block at 0x{:x}".format(pc))
 
 
 @ panda.queue_blocking
 def run_cmd():
+    """
+    This 'blocking' function is queued to run in a seperate thread from the main CPU loop
+    which allows for it to wait for the guest to complete commands
+    """
     # First revert to the qcow's root snapshot (synchronously)
     panda.revert_sync("root")
     # Then type a command via the serial port and print its results
@@ -37,4 +41,4 @@ def run_cmd():
 
 # Start the guest
 panda.run()
-print("Finished. Saw a total of {} basic blocks during execution".format(blocks))
+print("Finished. Saw a total of 0x{:x} basic blocks during execution".format(blocks))
